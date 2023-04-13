@@ -10,7 +10,7 @@ export default {
 
 
 <template>
-    <div id="app">
+    <div id="app" v-if="this.$route.path === '/'">
         <p><router-link to="/login">Войти</router-link></p>
         <p><router-link to="/register">Зарегестрироваться</router-link></p>
         <p><router-link to="/">Начальная страница</router-link></p>

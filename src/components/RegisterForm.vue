@@ -1,15 +1,33 @@
 <script>
+import axios from 'axios';
 export default {
     data() {
         return {
             email: "",
-            name: "",
-            password: ""
+            username: "",
+            password: "",
+            answer: "",
+            errorMessage: ""
         };
     },
     methods: {
-        submitForm: function () {
-            this.formSubmitted = true
+        onSubmit() {
+            axios.post('http://127.0.0.1:8000/api', {
+                jsonrpc: '2.0',
+                id: 0,
+                method: 'register_user',
+                params: {
+                    user_data: {
+                        email: this.email,
+                        username: this.username,
+                        password: this.password
+                    }
+                },
+            })
+            error = responce.
+                this.email = ""
+            this.username = ""
+            this.password = ""
         }
     },
 };
@@ -17,16 +35,26 @@ export default {
 
 <template>
     <div>
-        <form @submit.prevent="submitForm">
-            <span>Email</span><br>
-            <input v-model="email" type="text" placeholder="Enter your email" /><br>
-            <span>Name</span><br>
-            <input v-model="name" type="text" placeholder="Enter your name" /><br>
-            <span>Password</span><br>
-            <input v-model="password" type="password" placeholder="Enter your password" /><br>
+        <form @submit.prevent="onSubmit">
+            <span>Почта</span><br>
+            <input v-model="email" type="email" placeholder="Почта" required /><br>
+            <span>Имя</span><br>
+            <input v-model="username" type="text" placeholder="Имя" required /><br>
+            <span>Пароль</span><br>
+            <input v-model="password" type="password" placeholder="Пароль" required /><br>
+            <input type="submit" value="Войти">
         </form>
+        <p>{{ errorMessage }}</p>
     </div>
 </template>
+
+
+
+
+
+
+
+
 
 <style>
 form {

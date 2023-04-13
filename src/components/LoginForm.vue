@@ -3,12 +3,13 @@ export default {
     data() {
         return {
             email: "",
-            password: ""
+            password: "",
+            isSubmit: false
         };
     },
     methods: {
-        submitForm: function () {
-            this.formSubmitted = true
+        onSubmit(){
+            this.isSubmit = true
         }
     },
 };
@@ -16,14 +17,20 @@ export default {
 
 <template>
     <div>
-        <form @submit.prevent="submitForm">
-            <span>Email</span><br>
-            <input v-model="email" type="text" placeholder="Enter your email" /><br>
-            <span>Password</span><br>
-            <input v-model="password" type="password" placeholder="Enter your password" /><br>
-        </form>
+        <form @submit.prevent="onSubmit">
+            <span>Почта</span><br>
+            <input v-model="email" type="email" placeholder="Почта" required /><br>
+            <span>Пароль</span><br>
+            <input v-model="password" type="password" placeholder="Пароль" required /><br>
+            <input type="submit" value="Войти">
+        </form>      
     </div>
 </template>
+
+
+
+
+
 
 <style>
 form {
