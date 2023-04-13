@@ -1,7 +1,19 @@
+<script>
+import router from './router';
+
+
+export default {
+    name: "app",
+    components: { router }
+};
+</script>
+
+
 <template>
-    <div> Hello world</div>
+    <div id="app">
+        <p><router-link to="/login">Войти</router-link></p>
+        <p><router-link to="/register">Зарегестрироваться</router-link></p>
+        <p><router-link to="/">Начальная страница</router-link></p>
+    </div>
+    <router-view></router-view>
 </template>
-
-<script></script>
-
-<style></style>
