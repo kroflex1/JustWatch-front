@@ -4,12 +4,27 @@ export default {
         return {
             email: "",
             password: "",
-            isSubmit: false
         };
     },
     methods: {
-        onSubmit(){
-            this.isSubmit = true
+        onSubmit() {
+            axios.post('api', {
+                jsonrpc: '2.0',
+                id: 0,
+                method: 'login',
+                params: {
+                    user_data: {
+                        email: this.email,
+                        password: this.password
+                    }
+                },
+            }).then(function (responce) {
+                localStorage.setItem('access-token', responce.data.result.access_token)
+                localStorage.setItem('refresh-token', responce.data.result.refresh_token)
+            })
+            this.$router.push('/user')
+            this.email = ""
+            this.password = ""
         }
     },
 };
@@ -23,13 +38,9 @@ export default {
             <span>Пароль</span><br>
             <input v-model="password" type="password" placeholder="Пароль" required /><br>
             <input type="submit" value="Войти">
-        </form>      
+        </form>
     </div>
 </template>
-
-
-
-
 
 
 <style>

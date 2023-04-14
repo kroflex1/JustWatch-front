@@ -10,7 +10,6 @@ export default {
     },
     methods: {
         onSubmit() {
-            
             axios.post('api', {
                 jsonrpc: '2.0',
                 id: 0,
@@ -25,12 +24,12 @@ export default {
             }).then(function (responce) {
                 localStorage.setItem('access-token', responce.data.result.access_token)
                 localStorage.setItem('refresh-token', responce.data.result.refresh_token)
-                
+
             })
-            this.$router.push('/login')
+            this.$router.push('/user')
             this.email = ""
             this.username = ""
-            this.password = ""     
+            this.password = ""
         }
     },
 };
@@ -45,7 +44,7 @@ export default {
             <input v-model="username" type="text" placeholder="Имя" required /><br>
             <span>Пароль</span><br>
             <input v-model="password" type="password" placeholder="Пароль" required /><br>
-            <input type="submit" value="Войти">
+            <input type="submit" value="Зарегестрироваться">
         </form>
     </div>
 </template>
