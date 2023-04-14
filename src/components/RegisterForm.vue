@@ -6,13 +6,12 @@ export default {
             email: "",
             username: "",
             password: "",
-            answer: "",
-            errorMessage: ""
         };
     },
     methods: {
         onSubmit() {
-            axios.post('http://127.0.0.1:8000/api', {
+            
+            axios.post('api', {
                 jsonrpc: '2.0',
                 id: 0,
                 method: 'register_user',
@@ -23,11 +22,15 @@ export default {
                         password: this.password
                     }
                 },
+            }).then(function (responce) {
+                localStorage.setItem('access-token', responce.data.result.access_token)
+                localStorage.setItem('refresh-token', responce.data.result.refresh_token)
+                
             })
-            error = responce.
-                this.email = ""
+            this.$router.push('/login')
+            this.email = ""
             this.username = ""
-            this.password = ""
+            this.password = ""     
         }
     },
 };
@@ -44,7 +47,6 @@ export default {
             <input v-model="password" type="password" placeholder="Пароль" required /><br>
             <input type="submit" value="Войти">
         </form>
-        <p>{{ errorMessage }}</p>
     </div>
 </template>
 
