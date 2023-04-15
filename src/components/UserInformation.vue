@@ -15,7 +15,11 @@ export default {
             params: {}
         })
         if (typeof responce.data.error !== 'undefined')
+        {
+            console.log(responce)
             this.$router.push('/login')
+        }
+           
         else {
             this.username = responce.data.result.username
             this.email = responce.data.result.email
