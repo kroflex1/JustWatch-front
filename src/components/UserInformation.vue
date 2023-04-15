@@ -14,8 +14,12 @@ export default {
             method: 'get_current_user_information',
             params: {}
         })
-        this.username = responce.data.result.username
-        this.email = responce.data.result.email
+        if (typeof responce.data.error !== 'undefined')
+            this.$router.push('/login')
+        else {
+            this.username = responce.data.result.username
+            this.email = responce.data.result.email
+        }
     }
 };
 </script>
@@ -26,34 +30,3 @@ export default {
         <p>Почта: {{ email }}</p>
     </div>
 </template>
-
-
-<style>
-form {
-    padding: 10px;
-    border: 2px solid black;
-    border-radius: 5px;
-}
-
-input {
-    padding: 4px 8px;
-    margin: 4px;
-}
-
-span {
-    font-size: 18px;
-    margin: 4px;
-    font-weight: 500;
-}
-
-.submit {
-    font-size: 15px;
-    color: #fff;
-    background: #222;
-    padding: 6px 12px;
-    border: none;
-    margin-top: 8px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-</style>

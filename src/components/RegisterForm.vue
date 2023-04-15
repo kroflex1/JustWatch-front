@@ -6,11 +6,12 @@ export default {
             email: "",
             username: "",
             password: "",
+            errorMessage: ""
         };
     },
     methods: {
-        onSubmit() {
-            axios.post('api', {
+        async onSubmit() {
+            const responce = await axios.post('api', {
                 jsonrpc: '2.0',
                 id: 0,
                 method: 'register_user',
@@ -21,68 +22,50 @@ export default {
                         password: this.password
                     }
                 },
-            }).then(function (responce) {
+            })
+            if (typeof responce.data.error !== 'undefined')
+                this.errorMessage = 'Некорректные данные'
+            else {
                 localStorage.setItem('access-token', responce.data.result.access_token)
                 localStorage.setItem('refresh-token', responce.data.result.refresh_token)
-
-            })
-            this.$router.push('/user')
-            this.email = ""
-            this.username = ""
-            this.password = ""
+                this.$router.push('/user')
+                this.email = ""
+                this.username = ""
+                this.password = ""
+                this.errorMessage = ""
+            }
         }
     },
 };
 </script>
 
 <template>
-    <div>
-        <form @submit.prevent="onSubmit">
-            <span>Почта</span><br>
-            <input v-model="email" type="email" placeholder="Почта" required /><br>
-            <span>Имя</span><br>
-            <input v-model="username" type="text" placeholder="Имя" required /><br>
-            <span>Пароль</span><br>
-            <input v-model="password" type="password" placeholder="Пароль" required /><br>
-            <input type="submit" value="Зарегестрироваться">
-        </form>
+    <div class="container ">
+        <div class="row justify-content-center ">
+            <form @submit.prevent="onSubmit" class="col-3">
+                <div class=" mb-1">
+                    <label>Почта</label>
+                    <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Введите почту"
+                        v-model="email" required>
+                </div>
+                <div class="mb-1">
+                    <label>Имя</label>
+                    <input type="text" class="form-control" placeholder="Введите ваше имя" v-model="username" required>
+                </div>
+                <div class="mb-2">
+                    <label>Пароль</label>
+                    <input type="password" class="form-control" placeholder="Введите пароль" v-model="password" required>
+                </div>
+                <div v-if="errorMessage !== ''" class="alert alert-danger" role="alert">
+                    {{ errorMessage }}
+                </div>
+                <button type="submit" class="btn btn-primary ">Зарегестрироваться</button>
+            </form>
+        </div>
     </div>
 </template>
 
 
-
-
-
-
-
-
-
 <style>
-form {
-    padding: 10px;
-    border: 2px solid black;
-    border-radius: 5px;
-}
 
-input {
-    padding: 4px 8px;
-    margin: 4px;
-}
-
-span {
-    font-size: 18px;
-    margin: 4px;
-    font-weight: 500;
-}
-
-.submit {
-    font-size: 15px;
-    color: #fff;
-    background: #222;
-    padding: 6px 12px;
-    border: none;
-    margin-top: 8px;
-    cursor: pointer;
-    border-radius: 5px;
-}
 </style>
