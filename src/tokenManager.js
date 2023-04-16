@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 export async function checkAccessToken() {
-    if (checkAccessTokenExpire() === true) {
+    if (checkAccessTokenExpire()) {
         console.log('Начал замену токенов')
         const get_new_tokens_responce = await axios.post('api',
             {
@@ -27,7 +27,7 @@ export async function checkAccessToken() {
 }
 
 
-async function checkAccessTokenExpire() {
+function checkAccessTokenExpire() {
     var access_token = localStorage.getItem('access-token')
     var base64Url = access_token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -37,6 +37,6 @@ async function checkAccessTokenExpire() {
 
     var expire = JSON.parse(jsonPayload).exp
     var expire_date = new Date(parseInt(expire) * 1000)
-    var now_date = Date()
+    var now_date = new Date()
     return expire_date <= now_date
 }

@@ -1,12 +1,13 @@
 <script>
 import axios from 'axios';
 import { checkAccessToken } from '../tokenManager.js'
+import { toHandlers } from 'vue';
 export default {
     data() {
         return {
-            email: "",
-            password: "",
-            errorMessage: ""
+            videoName: "",
+            videoDescription: "",
+            videoFile: null
         };
     },
     async created() {
@@ -31,19 +32,34 @@ export default {
         }
     },
     methods: {
-        async onSubmit() {
-            const responce = await axios.post('api/upload-video-file', {
-
+        onFileSelected(event) {
+            this.videoFile = event.target.files[0]
+        },
+        async onSubmit(event) {
+            var formData = new FormData()
+            formData.append('video_data', this.videoFile, 'video_data')
+            // const responce = await axios({
+            //     method: "post",
+            //     url: "api/upload-video-file",
+            //     data: formData,
+            //     headers: { "access-token": localStorage.getItem('access-token') },
+            //     params: {
+            //         video_name: this.videoName,
+            //         video_descr: this.videoDescription
+            //     }
+            // })
+            const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mememememe", formData, {
+                headers: {
+                    'access-token': localStorage.getItem('access-token')
+                },
+                params:{
+                    video_name: this.videoName,
+                    video_descr: this.videoDescription
+                }
             })
-            if (typeof responce.data.error !== 'undefined')
-                this.errorMessage = 'Некорректные данные'
-            else {
-                localStorage.setItem('access-token', responce.data.result.access_token)
-                localStorage.setItem('refresh-token', responce.data.result.refresh_token)
-                this.$router.push('/user')
-                this.email = ""
-                this.password = ""
-            }
+            console.log(responce.data)
+            this.videoName = ""
+            this.videoDescription = ""
         }
     },
 };
@@ -54,14 +70,16 @@ export default {
         <form @submit.prevent="onSubmit" class="col-3">
             <div class="mb-1">
                 <label>Название видео</label>
-                <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Название видео" required>
+                <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Название видео"
+                    v-model="videoName" required>
             </div>
-            <div class="mb-1">
+            <div class="mb-3">
                 <label>Описание видео</label>
-                <input type="email" class="form-control" aria-describedby="emailHelp" placeholder="Описание видео">
+                <input type="text" class="form-control" aria-describedby="emailHelp" placeholder="Описание видео"
+                    v-model="videoDescription">
             </div>
             <div class="custom-file mb-2">
-                <input type="file" class="custom-file-input" required>
+                <input type="file" class="custom-file-input" @change="onFileSelected" required>
                 <label class="custom-file-label">Choose file</label>
             </div>
             <button type="submit" class="btn btn-primary ">Загрузить видео</button>
