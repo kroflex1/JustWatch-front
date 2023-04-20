@@ -26,6 +26,9 @@ export default {
                     <li class="nav-item">
                         <router-link class="nav-link" to="/register">Зарегестрироваться</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/videos">Список видео</router-link>
+                    </li>
                 </ul>
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -34,8 +37,7 @@ export default {
             </div>
         </div>
     </nav>
-
-    <router-view></router-view>
+    <div class="container-fluid"><router-view></router-view></div>
 </template>
 
 

@@ -38,16 +38,6 @@ export default {
         async onSubmit(event) {
             var formData = new FormData()
             formData.append('video_data', this.videoFile, 'video_data')
-            // const responce = await axios({
-            //     method: "post",
-            //     url: "api/upload-video-file",
-            //     data: formData,
-            //     headers: { "access-token": localStorage.getItem('access-token') },
-            //     params: {
-            //         video_name: this.videoName,
-            //         video_descr: this.videoDescription
-            //     }
-            // })
             const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mememememe", formData, {
                 headers: {
                     'access-token': localStorage.getItem('access-token')

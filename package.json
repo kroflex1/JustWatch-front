@@ -13,11 +13,13 @@
     "bootstrap": "^5.2.3",
     "bootstrap-vue": "^2.23.1",
     "vue": "^3.2.47",
+    "vue-core-video-player": "^0.2.0",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "video.js": "^8.0.4",
     "vite": "^4.1.4"
   }
 }
