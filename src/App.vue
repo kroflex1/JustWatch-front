@@ -27,7 +27,7 @@ export default {
                         <router-link class="nav-link" to="/register">Зарегестрироваться</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" to="/videos">Список видео</router-link>
+                        <router-link class="nav-link" to="/video-list">Список видео</router-link>
                     </li>
                 </ul>
                 <form class="d-flex">

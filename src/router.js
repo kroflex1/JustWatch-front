@@ -3,7 +3,8 @@ import LoginForm from './components/LoginForm.vue'
 import RegisterForm from './components/RegisterForm.vue'
 import UserInformation from './components/UserInformation.vue'
 import UploadVideo from './components/UploadVideo.vue'
-import Videos from './components/Videos.vue'
+import VideoList from './components/VideoList.vue'
+import Video from './components/Video.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -12,7 +13,8 @@ const router = createRouter({
         {path: '/register', component: RegisterForm},
         {path: '/user', component: UserInformation},
         {path: '/upload-video', component: UploadVideo},
-        {path: '/videos', component: Videos}
+        {path: '/video-list', component: VideoList},
+        {path: '/video/:id', component: Video}
     ]
 })
 

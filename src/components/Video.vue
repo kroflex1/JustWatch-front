@@ -11,7 +11,7 @@ export default {
             videoOptions: {
                 autoplay: false,
                 controls: true,
-                
+                preload: "auto",
                 sources: [
                     {
                         src: 'https://storage.yandexcloud.net/justwatchvideos/black%20hole.mp4',
