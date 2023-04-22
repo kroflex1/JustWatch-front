@@ -9,22 +9,21 @@ export default {
     },
     data() {
         return {
-            video_url: '0',
+            isVideoReady: false,
             videoOptions: {
                 autoplay: false,
                 controls: true,
                 preload: "auto",
                 sources: [
                     {
-                        src: this.video_url,
+                        src: '',
                         type: 'video/mp4'
                     }
                 ]
             }
         };
     },
-
-    async beforeCreate() {
+    async created() {
         await checkAccessToken();
         const responce = await axios.post('api',
             {
@@ -41,16 +40,16 @@ export default {
         if (typeof responce.data.error !== 'undefined')
             this.$router.push('/login')
         else {
-            this.video_url = responce.data.result
-            this.videoOptions.sources[0].src = this.video_url
-            console.log(this.video_url)
+            this.videoOptions.sources[0].src = responce.data.result
+            this.isVideoReady = true
         }
     }
 };
 </script>
 
 
+
 <template>
-    <video-player :options="videoOptions" />
+    <video-player v-if="isVideoReady" :options="videoOptions" />
 </template>
   
