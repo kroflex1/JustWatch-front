@@ -22,10 +22,9 @@ export default {
                     'access-token': localStorage.getItem('access-token')
                 }
             })
-        if (typeof responce.data.error !== 'undefined') {
+        if (typeof responce.data.error !== 'undefined') 
             this.$router.push('/login')
-        }
-
+            
         else {
             this.username = responce.data.result.username
             this.email = responce.data.result.email
