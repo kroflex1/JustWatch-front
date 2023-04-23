@@ -1,6 +1,6 @@
 <script>
 import VideoPlayer from '@/components/VideoPlayer.vue';
-import axios from 'axios';
+import { getResponce } from '@/assets/requestManager.js';
 export default {
     name: 'VideoExample',
     components: {
@@ -23,18 +23,7 @@ export default {
         };
     },
     async created() {
-        const responce = await axios.post('api',
-            {
-                jsonrpc: '2.0',
-                id: 0,
-                method: 'get_video_url_by_id',
-                params: { video_id: parseInt(this.$route.params.id) }
-            },
-            {
-                headers: {
-                    'access-token': localStorage.getItem('access-token')
-                }
-            })
+        const responce = await getResponce('get_video_url_by_id', { video_id: parseInt(this.$route.params.id) })
         if (typeof responce.data.error !== 'undefined')
             this.$router.push('/login')
         else {

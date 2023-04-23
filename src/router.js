@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import { isUserAuthenticated } from '@/assets/tokenManager.js'
 import LoginForm from '@/views/LoginForm.vue'
 import RegisterForm from '@/views/RegisterForm.vue'
-import UserInformation from '@/views/UserInformation.vue'
+import UserProfile from '@/views/UserProfile.vue'
 import UploadVideo from '@/views/UploadVideo.vue'
 import VideoList from '@/views/VideoList.vue'
 import Video from '@/views/Video.vue'
@@ -12,7 +12,7 @@ const router = createRouter({
     routes: [
         { path: '/login', component: LoginForm, name: 'login' },
         { path: '/register', component: RegisterForm, name: 'register' },
-        { path: '/user', component: UserInformation, name: 'user' },
+        { path: '/user', component: UserProfile, name: 'user-profile' },
         { path: '/upload-video', component: UploadVideo, name: 'upload-video' },
         { path: '/video-list', component: VideoList, name: 'video-list' },
         { path: '/video/:id', component: Video, name: 'video-player' }

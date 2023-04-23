@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios';
+import { getResponce } from '@/assets/requestManager.js';
 export default {
     data() {
         return {
@@ -7,18 +7,7 @@ export default {
         };
     },
     async created() {
-        const responce = await axios.post('api',
-            {
-                jsonrpc: '2.0',
-                id: 0,
-                method: 'get_all_videos_inf',
-                params: {}
-            },
-            {
-                headers: {
-                    'access-token': localStorage.getItem('access-token')
-                }
-            })
+        const responce = await getResponce('get_all_videos_inf', {})
         if (typeof responce.data.error !== 'undefined')
             this.$router.push('/login')
         else 

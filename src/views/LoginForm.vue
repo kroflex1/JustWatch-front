@@ -1,5 +1,5 @@
 <script>
-import axios from 'axios';
+import { getResponce } from '@/assets/requestManager.js';
 export default {
     data() {
         return {
@@ -10,25 +10,17 @@ export default {
     },
     methods: {
         async onSubmit() {
-            const responce = await axios.post('api', {
-                jsonrpc: '2.0',
-                id: 0,
-                method: 'login',
-                params: {
-                    user_data: {
-                        email: this.email,
-                        password: this.password
-                    }
-                },
-            })
+            var userData = {
+                email: this.email,
+                password: this.password
+            }
+            const responce = await getResponce('login', { user_data: userData })
             if (typeof responce.data.error !== 'undefined')
                 this.errorMessage = 'Некорректные данные'
             else {
                 localStorage.setItem('access-token', responce.data.result.access_token)
                 localStorage.setItem('refresh-token', responce.data.result.refresh_token)
                 this.$router.push('/user')
-                this.email = ""
-                this.password = ""
             }
         }
     },
