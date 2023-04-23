@@ -1,7 +1,6 @@
 <script>
 import VideoPlayer from '@/components/VideoPlayer.vue';
 import axios from 'axios';
-import { checkAccessToken } from '../tokenManager.js'
 export default {
     name: 'VideoExample',
     components: {
@@ -24,7 +23,6 @@ export default {
         };
     },
     async created() {
-        await checkAccessToken();
         const responce = await axios.post('api',
             {
                 jsonrpc: '2.0',
@@ -43,7 +41,7 @@ export default {
             this.videoOptions.sources[0].src = responce.data.result
             this.isVideoReady = true
         }
-    }
+    },
 };
 </script>
 

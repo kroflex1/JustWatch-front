@@ -1,20 +1,17 @@
 <script>
 import axios from 'axios';
-import { checkAccessToken } from '../tokenManager.js'
 export default {
     data() {
         return {
-            username: "",
-            email: ""
+            videos: []
         };
     },
     async created() {
-        await checkAccessToken();
         const responce = await axios.post('api',
             {
                 jsonrpc: '2.0',
                 id: 0,
-                method: 'get_current_user_information',
+                method: 'get_all_videos_inf',
                 params: {}
             },
             {
@@ -22,20 +19,20 @@ export default {
                     'access-token': localStorage.getItem('access-token')
                 }
             })
-        if (typeof responce.data.error !== 'undefined') 
+        if (typeof responce.data.error !== 'undefined')
             this.$router.push('/login')
-            
-        else {
-            this.username = responce.data.result.username
-            this.email = responce.data.result.email
-        }
+        else 
+            this.videos = responce.data.result
     }
 };
 </script>
 
 <template>
-    <div>
-        <p>Имя: {{ username }}</p>
-        <p>Почта: {{ email }}</p>
+    <div class="list-group col-4">
+        <template v-for="video in videos">    
+            <router-link v-bind:to="`/video/${video.id}`" class="list-group-item list-group-item-action">
+                {{ video.video_name }}
+            </router-link>
+        </template>
     </div>
 </template>

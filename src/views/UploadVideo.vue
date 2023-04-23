@@ -1,7 +1,5 @@
 <script>
 import axios from 'axios';
-import { checkAccessToken } from '../tokenManager.js'
-import { toHandlers } from 'vue';
 export default {
     data() {
         return {
@@ -11,7 +9,6 @@ export default {
         };
     },
     async created() {
-        await checkAccessToken();
         const responce = await axios.post('api',
             {
                 jsonrpc: '2.0',

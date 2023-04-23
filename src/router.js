@@ -1,21 +1,30 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import LoginForm from './components/LoginForm.vue'
-import RegisterForm from './components/RegisterForm.vue'
-import UserInformation from './components/UserInformation.vue'
-import UploadVideo from './components/UploadVideo.vue'
-import VideoList from './components/VideoList.vue'
-import Video from './components/Video.vue'
+import { isUserAuthenticated } from '@/assets/tokenManager.js'
+import LoginForm from '@/views/LoginForm.vue'
+import RegisterForm from '@/views/RegisterForm.vue'
+import UserInformation from '@/views/UserInformation.vue'
+import UploadVideo from '@/views/UploadVideo.vue'
+import VideoList from '@/views/VideoList.vue'
+import Video from '@/views/Video.vue'
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
-        {path: '/login', component: LoginForm},
-        {path: '/register', component: RegisterForm},
-        {path: '/user', component: UserInformation},
-        {path: '/upload-video', component: UploadVideo},
-        {path: '/video-list', component: VideoList},
-        {path: '/video/:id', component: Video}
+        { path: '/login', component: LoginForm, name: 'login' },
+        { path: '/register', component: RegisterForm, name: 'register' },
+        { path: '/user', component: UserInformation, name: 'user' },
+        { path: '/upload-video', component: UploadVideo, name: 'upload-video' },
+        { path: '/video-list', component: VideoList, name: 'video-list' },
+        { path: '/video/:id', component: Video, name: 'video-player' }
     ]
+})
+
+
+router.beforeEach(async (to, from) => {
+    const freeEntry = ['login', 'register']
+    const isAuth = await isUserAuthenticated()
+    if (freeEntry.indexOf(to.name) == -1 && !isAuth)
+        return { name: 'login' }
 })
 
 export default router
