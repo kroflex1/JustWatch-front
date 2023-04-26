@@ -10,11 +10,11 @@ import Video from '@/views/Video.vue'
 const router = createRouter({
     history: createWebHashHistory(),
     routes: [
+        { path: '/', component: VideoList, name: 'video-list' },
         { path: '/login', component: LoginForm, name: 'login' },
         { path: '/register', component: RegisterForm, name: 'register' },
         { path: '/user', component: UserProfile, name: 'user-profile' },
-        { path: '/upload-video', component: UploadVideo, name: 'upload-video' },
-        { path: '/video-list', component: VideoList, name: 'video-list' },
+        { path: '/upload-video', component: UploadVideo, name: 'upload-video' },   
         { path: '/video/:id', component: Video, name: 'video-player' }
     ]
 })
