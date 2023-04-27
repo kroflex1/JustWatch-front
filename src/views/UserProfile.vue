@@ -16,8 +16,14 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="user-profile">
         <p>Имя: {{ username }}</p>
         <p>Почта: {{ email }}</p>
     </div>
 </template>
+
+<style scoped>
+.user-profile {
+    color: white;
+
+}</style>

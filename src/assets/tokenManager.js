@@ -26,7 +26,7 @@ export async function isUserAuthenticated() {
         }
         else {
             console.log('Refresh token просрочен')
-            return fasle
+            return false
         }
     }
     return true

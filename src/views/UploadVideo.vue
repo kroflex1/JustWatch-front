@@ -133,6 +133,5 @@ export default {
 }
 
 .confirm-check-mark path {
-
     color: blueviolet;
 }</style>
