@@ -27,8 +27,6 @@ export default {
                 numberOfLikes: 0,
                 numberOfDislikes: 0
             },
-            startNumberOfLikes: 0,
-            startNumberOfDislikes: 0,
             isLikeActive: false,
             isDislikeActive: false
         };
@@ -45,8 +43,14 @@ export default {
                 numberOfLikes: responce.data.result.reactionsInf.number_of_likes,
                 numberOfDislikes: responce.data.result.reactionsInf.number_of_dislikes
             }
+            const startUserReaction = responce.data.result.user_reaction
+            this.setReactionsActiveStatus(startUserReaction == 'like', startUserReaction == 'dislike')
             this.startNumberOfLikes = this.video_inf.numberOfLikes
             this.startNumberOfDislikes = this.video_inf.numberOfDislikes
+            if (startUserReaction == 'like')
+                this.startNumberOfLikes -= 1
+            if (startUserReaction == 'dislike')
+                this.startNumberOfDislikes -= 1
             this.isVideoReady = true
         }
     },
@@ -73,19 +77,23 @@ export default {
             this.isLikeActive = likeStatus
             this.isDislikeActive = dislikeStatus
         },
-        putReaction(event) {
+        async putReaction(event) {
             this.video_inf.numberOfDislikes = this.startNumberOfDislikes
             this.video_inf.numberOfLikes = this.startNumberOfLikes
             if (event.target.id == 'like' && !this.isLikeActive) {
                 this.setReactionsActiveStatus(true, false)
                 this.video_inf.numberOfLikes += 1
+                const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "like" })
             }
             else if (event.target.id == 'dislike' && !this.isDislikeActive) {
                 this.setReactionsActiveStatus(false, true)
                 this.video_inf.numberOfDislikes += 1
+                const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "dislike" })
             }
-            else
+            else {
                 this.setReactionsActiveStatus(false, false)
+                const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "neutral" })
+            }
         }
     }
 };
