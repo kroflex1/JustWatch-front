@@ -6,18 +6,23 @@ export default {
             videoName: "",
             videoDescription: "",
             videoFile: null,
+            imagePreview: null,
             isVideoUploading: false,
             videoUploadProgress: 0,
             isVideoReady: false
         };
     },
     methods: {
-        onFileSelected(event) {
+        onVideoFileSelected(event) {
             this.videoFile = event.target.files[0]
+        },
+        onImagePreviewSelected(event) {
+            this.imagePreview = event.target.files[0]
         },
         async onSubmit(event) {
             var formData = new FormData()
             formData.append('video_data', this.videoFile, 'video_data')
+            formData.append('preview_image_data', this.imagePreview, 'preview_image_data')
             this.isVideoUploading = false
             this.isVideoUploading = true
             const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mememememe", formData, {
@@ -68,11 +73,20 @@ export default {
                                     </div>
 
                                     <div class="form-outline form-white mb-4">
-                                        <input type="file" class="form-control form-control-lg" @change="onFileSelected"
-                                            required />
+                                        <input type="file" class="form-control form-control-lg"
+                                            @change="onVideoFileSelected" required />
                                         <label class="form-label">Видео</label>
                                     </div>
 
+                                    <div class="form-outline form-white mb-4">
+                                        <input type="file" class="form-control form-control-lg"
+                                            @change="onImagePreviewSelected" />
+                                        <label class="form-label m-0">Превью видео</label>
+                                        <div class="form-text mt-0">
+                                            Превью для видео необезательно для загрузки
+                                        </div>
+
+                                    </div>
 
 
                                     <button class="btn btn-outline-light btn-lg px-5 mb-4" type="submit">Загрузить
@@ -134,4 +148,5 @@ export default {
 
 .confirm-check-mark path {
     color: blueviolet;
-}</style>
+}
+</style>
