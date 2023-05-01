@@ -28,7 +28,9 @@ export default {
                 numberOfDislikes: 0
             },
             isLikeActive: false,
-            isDislikeActive: false
+            isDislikeActive: false,
+            comments: [],
+            commentText: ''
         };
     },
     async created() {
@@ -43,6 +45,7 @@ export default {
                 numberOfLikes: responce.data.result.reactionsInf.number_of_likes,
                 numberOfDislikes: responce.data.result.reactionsInf.number_of_dislikes
             }
+            this.comments = responce.data.result.comments
             const startUserReaction = responce.data.result.user_reaction
             this.setReactionsActiveStatus(startUserReaction == 'like', startUserReaction == 'dislike')
             this.startNumberOfLikes = this.video_inf.numberOfLikes
@@ -94,6 +97,12 @@ export default {
                 this.setReactionsActiveStatus(false, false)
                 const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "neutral" })
             }
+        },
+        async onWriteComment() {
+            await getResponce('add_comment_to_video', { video_id: parseInt(this.$route.params.id), comment_text: this.commentText })
+            const responce = await getResponce('get_comments_from_video', { video_id: parseInt(this.$route.params.id) })
+            this.commentText = ''
+            this.comments = responce.data.result
         }
     }
 };
@@ -105,7 +114,7 @@ export default {
     <div class="row justify-content-md-center h-20 video-container" v-if="isVideoReady">
         <div class="col-7">
             <video-player :options="videoOptions" class="mb-3" />
-            <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-2">
                 <p class="fw-bold fs-3 lh-1">{{ video_inf.name }}</p>
                 <div>
                     <button class="reaction-button" :class="likeClassObject" id="like" @click="putReaction">
@@ -116,10 +125,24 @@ export default {
                     </button>
                 </div>
             </div>
-            <div>
+            <div class="mb-4">
                 <p>{{ video_inf.description }}</p>
             </div>
+            <form class="d-flex flex-column mb-3" @submit.prevent="onWriteComment">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="1" placeholder="Введите комментарий"
+                    v-model="commentText" required></textarea>
+                <button class="btn btn-primary align-self-end" type="submit">Оставить комментарий</button>
+            </form>
 
+            <div class="d-flex flex-column comments">
+                <template v-for="(comment, index) in comments" :key="index">
+                    <div class="comment p-3 pe-4">
+                        <p class="mb-2">{{ comment.author_name }}</p>
+                        <p class="mb-1">{{ comment.text }}</p>
+                        <p class="comment-date">{{ comment.published_at }}</p>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
 </template>
@@ -150,5 +173,18 @@ export default {
 
 .active:nth-child(2) {
     color: red;
+}
+
+.comment {
+    background-color: black;
+    border-radius: 10px;
+}
+
+.comments {
+    gap: 1rem;
+}
+
+.comment-date {
+    color: grey
 }
 </style>
