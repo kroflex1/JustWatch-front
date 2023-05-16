@@ -9,7 +9,8 @@ export default {
             imagePreview: null,
             isVideoUploading: false,
             videoUploadProgress: 0,
-            isVideoReady: false
+            isVideoCheck: false,
+            isVideoReady: false,
         };
     },
     methods: {
@@ -20,11 +21,11 @@ export default {
             this.imagePreview = event.target.files[0]
         },
         async onSubmit(event) {
+            this.isVideoReady = false
             var formData = new FormData()
             formData.append('video_data', this.videoFile, 'video_data')
             if (this.imagePreview !== null)
                 formData.append('preview_image_data', this.imagePreview, 'preview_image_data')
-            this.isVideoUploading = false
             this.isVideoUploading = true
             const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mememememe", formData, {
                 headers: {
@@ -36,9 +37,13 @@ export default {
                 },
                 onUploadProgress: function (progressEvent) {
                     this.videoUploadProgress = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
+                    if (this.videoUploadProgress >= 100)
+                        this.isVideoCheck = true
                 }.bind(this)
             })
-            console.log(responce)
+            this.isVideoCheck = false
+            this.isVideoUploading = false
+            this.videoUploadProgress = 0
             this.isVideoReady = true
             this.videoDescription = 0
             this.videoName = ""
@@ -81,28 +86,35 @@ export default {
 
                                     <div class="form-outline form-white mb-4">
                                         <input type="file" class="form-control form-control-lg"
-                                            @change="onImagePreviewSelected" />
+                                            @change="onImagePreviewSelected" required />
                                         <label class="form-label m-0">Превью видео</label>
-                                        <div class="form-text mt-0">
-                                            Превью для видео необезательно для загрузки
-                                        </div>
-
                                     </div>
 
 
                                     <button class="btn btn-outline-light btn-lg px-5 mb-4" type="submit">Загрузить
                                         видео</button>
 
-                                    <div class="progress" style="height: 20px;" v-if="isVideoUploading && !isVideoReady">
+                                    <div class="progress mb-3" style="height: 20px;" v-if="isVideoUploading">
                                         <div class="progress-bar progress-bar-striped upload-video-progress-bar"
                                             role="progressbar" :style="{ width: videoUploadProgress + '%' }"
                                             aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div v-if="isVideoCheck">
+                                        <p class="fw-bold fs-5 text-uppercase">Проверка видео</p>
+                                        <div class="lds-ellipsis">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+
+
+                                    <div v-if="isVideoReady">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="95" fill="currentColor"
-                                            class="bi bi-check confirm-check-mark" viewBox="0 0 16 16" v-if="isVideoReady">
+                                            class="bi bi-check confirm-check-mark" viewBox="0 0 16 16">
                                             <path
                                                 d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z" />
                                         </svg>
@@ -149,5 +161,73 @@ export default {
 
 .confirm-check-mark path {
     color: blueviolet;
+}
+
+
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.lds-ellipsis div {
+    position: absolute;
+    top: 13px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes lds-ellipsis3 {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0);
+    }
+}
+
+@keyframes lds-ellipsis2 {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(24px, 0);
+    }
 }
 </style>
