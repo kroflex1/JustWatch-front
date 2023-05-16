@@ -22,7 +22,8 @@ export default {
         async onSubmit(event) {
             var formData = new FormData()
             formData.append('video_data', this.videoFile, 'video_data')
-            formData.append('preview_image_data', this.imagePreview, 'preview_image_data')
+            if (this.imagePreview !== null)
+                formData.append('preview_image_data', this.imagePreview, 'preview_image_data')
             this.isVideoUploading = false
             this.isVideoUploading = true
             const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mememememe", formData, {
