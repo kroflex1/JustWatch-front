@@ -80,20 +80,20 @@ export default {
             this.isLikeActive = likeStatus
             this.isDislikeActive = dislikeStatus
         },
-        async OnLikeClick(){
+        async OnLikeClick() {
             this.video_inf.numberOfLikes = this.startNumberOfLikes
             this.video_inf.numberOfDislikes = this.startNumberOfDislikes
-            if (!this.isLikeActive){
+            if (!this.isLikeActive) {
                 this.setReactionsActiveStatus(true, false)
                 this.video_inf.numberOfLikes += 1
                 const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "like" })
             }
-            else{
+            else {
                 this.setReactionsActiveStatus(false, false)
                 const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "neutral" })
             }
         },
-        async OnDislikeClick(){
+        async OnDislikeClick() {
             this.video_inf.numberOfLikes = this.startNumberOfLikes
             this.video_inf.numberOfDislikes = this.startNumberOfDislikes
             if (!this.isDislikeActive) {
@@ -101,7 +101,7 @@ export default {
                 this.video_inf.numberOfDislikes += 1
                 const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "dislike" })
             }
-            else{
+            else {
                 this.setReactionsActiveStatus(false, false)
                 const responce = await getResponce('rate_video', { video_id: parseInt(this.$route.params.id), user_reaction: "neutral" })
             }
@@ -111,6 +111,15 @@ export default {
             const responce = await getResponce('get_comments_from_video', { video_id: parseInt(this.$route.params.id) })
             this.commentText = ''
             this.comments = responce.data.result
+        },
+        convertTime(date) {
+            var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            };
+            var x = date.toLocaleString("ru", options)
+            return x
         }
     }
 };
@@ -131,12 +140,13 @@ export default {
                                 class="bi bi-hand-thumbs-up-fill me-2" viewBox="0 0 16 16">
                                 <path
                                     d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a9.84 9.84 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733.058.119.103.242.138.363.077.27.113.567.113.856 0 .289-.036.586-.113.856-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.163 3.163 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.82 4.82 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
-                            </svg> 
-                            <p id="like">{{ numberOfLikes }}</p> 
+                            </svg>
+                            <p id="like">{{ numberOfLikes }}</p>
                         </div>
 
                     </button>
-                    <button class="reaction-button py-2 px-2" :class="dislikeClassObject" id="dislike" @click="OnDislikeClick">
+                    <button class="reaction-button py-2 px-2" :class="dislikeClassObject" id="dislike"
+                        @click="OnDislikeClick">
                         <div class="d-flex align-items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                                 class="bi bi-hand-thumbs-down-fill me-2" viewBox="0 0 16 16">
@@ -162,7 +172,7 @@ export default {
                     <div class="comment p-3 pe-4">
                         <p class="mb-2">{{ comment.author_name }}</p>
                         <p class="mb-1">{{ comment.text }}</p>
-                        <p class="comment-date">{{ comment.published_at }}</p>
+                        <p class="comment-date">{{ convertTime(comment.published_at) }}</p>
                     </div>
                 </template>
             </div>

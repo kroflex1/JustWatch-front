@@ -13,7 +13,7 @@ const router = createRouter({
         { path: '/', component: VideoList, name: 'video-list' },
         { path: '/login', component: LoginForm, name: 'login' },
         { path: '/register', component: RegisterForm, name: 'register' },
-        { path: '/user', component: UserProfile, name: 'user-profile' },
+        { path: '/user/:id', component: UserProfile, name: 'user-profile' },
         { path: '/upload-video', component: UploadVideo, name: 'upload-video' },   
         { path: '/video/:id', component: Video, name: 'video-player' }
     ]

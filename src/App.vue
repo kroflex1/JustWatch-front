@@ -1,40 +1,87 @@
 <script>
 import router from './router';
-import { getResponce } from '@/assets/requestManager.js';
+import { getUserIdFromToken } from '@/assets/tokenManager.js'
 
 export default {
     name: "app",
-    components: { router }
+    components: { router },
+    data() {
+        return {
+            user_id: null,
+        };
+    },
+    async created() {
+        this.user_id = getUserIdFromToken()
+    },
+
+    methods: {
+        Exit() {
+            localStorage.removeItem('access-token')
+            localStorage.removeItem('refresh-token')
+        }
+    },
 };
 </script>
 
 
 <template>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <nav class="navbar navbar-dark bg-dark fixed-top test-color">
         <div class="container-fluid">
-            <div class="collapse navbar-collapse">
-                <p class="navbar-brand m-0">JustWatch</p>
-                <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/">Главная</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/user">Личный кабинет</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/upload-video">Загрузить видео</router-link>
-                    </li>
-                </ul>
-                <router-link class="navbar-brand ms-auto" to="/login">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" fill="currentColor" class="bi bi-box-arrow-in-right"
-                        viewBox="0 0 16 16">
-                        <path fill-rule="evenodd"
-                            d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z" />
-                        <path fill-rule="evenodd"
-                            d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
-                    </svg>
-                    Войти
-                </router-link>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar"
+                aria-controls="offcanvasDarkNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">JustWatch</a>
+
+            <div class="offcanvas text-bg-dark  offcanvas-start" tabindex="-1" id="offcanvasDarkNavbar"
+                aria-labelledby="offcanvasDarkNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Меню</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item ">
+                            <router-link class="nav-link fs-5 d-flex align-items-center gap-3" to="/"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" fill="currentColor" class="bi bi-house"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z" />
+                                </svg>Главная</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link fs-5 d-flex align-items-center gap-3"
+                                v-bind:to="`/user/${user_id}`"> <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                    fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                    <path fill-rule="evenodd"
+                                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                </svg>Профиль</router-link>
+                        </li>
+                        <li class="nav-item ">
+                            <router-link class="nav-link fs-5 d-flex align-items-center gap-3" to="/upload-video"><svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" fill="currentColor" class="bi bi-upload"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                                    <path
+                                        d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
+                                </svg>Загрузить видео</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link fs-5 d-flex align-items-center gap-3" to="/login" @click.native="Exit"> 
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg" width="24" fill="currentColor"
+                                    class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+                                    <path fill-rule="evenodd"
+                                        d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+                                </svg>Выйти</router-link>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -47,28 +94,16 @@ body {
     padding-top: 65px;
     color: white;
 
-    --s: 50px;
-    --c: #191b22;
-    --_s: calc(2*var(--s)) calc(2*var(--s));
-    --_g: 35.36% 35.36% at;
-    --_c: #0000 66%, #20222a 68% 70%, #0000 72%;
-    background:
-        radial-gradient(var(--_g) 100% 25%, var(--_c)) var(--s) var(--s)/var(--_s),
-        radial-gradient(var(--_g) 0 75%, var(--_c)) var(--s) var(--s)/var(--_s),
-        radial-gradient(var(--_g) 100% 25%, var(--_c)) 0 0/var(--_s),
-        radial-gradient(var(--_g) 0 75%, var(--_c)) 0 0/var(--_s),
-        repeating-conic-gradient(var(--c) 0 25%, #0000 0 50%) 0 0/var(--_s),
-        radial-gradient(var(--_c)) 0 calc(var(--s)/2)/var(--s) var(--s) var(--c);
-    background-attachment: fixed;
-
-
-    /* background: #6a11cb;
-    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1)) */
+    background: linear-gradient(109.6deg, rgb(20, 30, 48) 11.2%, rgb(36, 59, 85) 91.1%);
 }
 
-p{
+p {
     margin: 0;
+}
+
+.test-color {
+    background: rgb(32, 38, 57);
+
 }
 </style>
 

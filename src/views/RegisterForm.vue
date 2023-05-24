@@ -22,7 +22,6 @@ export default {
             else {
                 localStorage.setItem('access-token', responce.data.result.access_token)
                 localStorage.setItem('refresh-token', responce.data.result.refresh_token)
-                localStorage.setItem('name', this.username)
                 this.$router.push('/')
                 this.errorMessage = ""
             }
