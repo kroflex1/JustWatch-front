@@ -1,6 +1,10 @@
 <script>
-import { getResponce } from '@/assets/requestManager.js';
+import { getResponce } from '@/scripts/requestManager.js';
+import VideoBlock from '@/components/VideoBlock.vue'
 export default {
+    components: {
+        VideoBlock
+    },
     data() {
         return {
             videos: [],
@@ -15,7 +19,18 @@ export default {
             this.$router.push('/login')
         else
             this.videos = responce.data.result
-        console.log(responce)
+    },
+    methods:{
+        convertDate(date) {
+            var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                timezone: 'UTC',
+            };
+            var datetime = new Date(date)
+            return datetime.toLocaleString("ru", options)
+        }
     }
 };
 </script>
@@ -30,14 +45,16 @@ export default {
         </div>
         <template v-for="video in videos">
             <div class="col mb-4 h-100">
-                <div class="card video_preview text-white bg-dark scale" style="width: 18rem;">
+                <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name"
+                    :video_id="video.id" :author_name="video.author_name" :published_at="convertDate(video.published_at)"/>
+                <!-- <div class="card video_preview text-white bg-dark scale" style="width: 18rem;">
                     <img :src="video.preview_image_url" class="card-img-top scale video_preview_image">
                     <div class="card-body">
                         <h5 class="card-title">{{ video.video_name }}</h5>
                         <router-link v-bind:to="`/video/${video.id}`" class="stretched-link">
                         </router-link>
                     </div>
-                </div>
+                </div> -->
             </div>
         </template>
     </div>
@@ -49,7 +66,7 @@ export default {
 }
 
 .video_preview:hover {
-    background-color: grey !important;
+    background-color: rgb(87, 87, 87) !important;
 }
 
 .lds-ring {

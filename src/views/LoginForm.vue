@@ -1,5 +1,5 @@
 <script>
-import { getResponce } from '@/assets/requestManager.js';
+import { getResponce } from '@/scripts/requestManager.js';
 export default {
     data() {
         return {

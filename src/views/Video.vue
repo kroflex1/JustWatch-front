@@ -1,6 +1,6 @@
 <script>
 import VideoPlayer from '@/components/VideoPlayer.vue';
-import { getResponce } from '@/assets/requestManager.js';
+import { getResponce } from '@/scripts/requestManager.js';
 export default {
     name: 'VideoExample',
     components: {
@@ -117,9 +117,12 @@ export default {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',
+                timezone: 'UTC',
+                hour: 'numeric',
+                minute: 'numeric',
             };
-            var x = date.toLocaleString("ru", options)
-            return x
+            var datetime = new Date(date) 
+            return datetime.toLocaleString("ru", options)
         }
     }
 };
@@ -129,9 +132,9 @@ export default {
 
 <template>
     <div class="row justify-content-md-center h-20 video-container" v-if="isVideoReady">
-        <div class="col-7">
+        <div class="col-7 bg-dark">
             <video-player :options="videoOptions" class="mb-3" />
-            <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="d-flex justify-content-between align-items-center mb-1">
                 <p class="fw-bold fs-3 lh-1">{{ video_inf.name }}</p>
                 <div>
                     <button class="reaction-button py-2 px-2" :class="likeClassObject" id="like" @click="OnLikeClick">
@@ -161,8 +164,8 @@ export default {
             <div class="mb-4">
                 <p>{{ video_inf.description }}</p>
             </div>
-            <form class="d-flex flex-column mb-3" @submit.prevent="onWriteComment">
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="1" placeholder="Введите комментарий"
+            <form class="d-flex flex-column mb-3 gap-2" @submit.prevent="onWriteComment">
+                <textarea class="form-control bg-dark text-white" id="exampleFormControlTextarea1" rows="1" placeholder="Введите комментарий"
                     v-model="commentText" required></textarea>
                 <button class="btn btn-primary align-self-end" type="submit">Оставить комментарий</button>
             </form>

@@ -1,6 +1,6 @@
 <script>
-import { getResponce } from '@/assets/requestManager.js';
-import { getUserIdFromToken } from '@/assets/tokenManager.js'
+import { getResponce } from '@/scripts/requestManager.js';
+import { getUserIdFromToken } from '@/scripts/tokenManager.js'
 export default {
     data() {
         return {
@@ -8,8 +8,10 @@ export default {
             user_id: null,
             author_username: "",
             number_of_subscribers: null,
+            number_of_videos: null,
             author_id: null,
             author_videos: [],
+            author_avatar_url: null,
             is_subscribed: null,
         };
     },
@@ -18,7 +20,9 @@ export default {
         var responce = await getResponce('get_user_profile', { user_id: this.author_id })
         this.author_username = responce.data.result.username
         this.number_of_subscribers = responce.data.result.number_of_subscribers
+        this.number_of_videos = responce.data.result.number_of_videos
         this.author_videos = responce.data.result.user_videos
+        this.author_avatar_url = responce.data.result.user_avatar_url
 
         var responce = await getResponce('is_subscribed_to_author', { author_id: this.author_id })
         this.is_subscribed = responce.data.result
@@ -30,7 +34,7 @@ export default {
     methods: {
         async changeSubscription() {
             if (this.is_subscribed) {
-                const responce = await getResponce('unsubscribe', { author_id: this.author_id})
+                const responce = await getResponce('unsubscribe', { author_id: this.author_id })
                 this.number_of_subscribers -= 1
             }
             else {
@@ -67,10 +71,14 @@ export default {
         </div>
         <div v-else>
             <div class="d-flex align-items-center gap-3 m-4">
-                <img src="@/files/frog.jpg" class="user-avatar" alt="">
+                <img :src="author_avatar_url" class="user-avatar" alt="">
                 <div class="d-flex flex  flex-column">
                     <p class="display-3">{{ author_username }}</p>
-                    <p>Подписчиков: {{ NumberOfSubscribers }}</p>
+                    <div class="d-flex gap-3">
+                        <p>Подписчиков: {{ NumberOfSubscribers }}</p>
+                        <p>Видео: {{ number_of_videos }}</p>
+                    </div>
+
                 </div>
                 <button class="btn btn-dark btn-lg ms-auto" @click="changeSubscription" v-if="user_id != author_id">{{
                     SubscribeText }}</button>

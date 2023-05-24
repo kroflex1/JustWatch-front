@@ -24,10 +24,8 @@ export default {
             this.isVideoReady = false
             var formData = new FormData()
             formData.append('video_data', this.videoFile, 'video_data')
-            if (this.imagePreview !== null)
-                formData.append('preview_image_data', this.imagePreview, 'preview_image_data')
             this.isVideoUploading = true
-            const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mememememe", formData, {
+            const responce = await axios.post("api/upload-video-file?video_name=testNames&video_descr=mem", formData, {
                 headers: {
                     'access-token': localStorage.getItem('access-token')
                 },
