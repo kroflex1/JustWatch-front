@@ -20,7 +20,7 @@ export default {
         else
             this.videos = responce.data.result
     },
-    methods:{
+    methods: {
         convertDate(date) {
             var options = {
                 year: 'numeric',
@@ -45,30 +45,15 @@ export default {
         </div>
         <template v-for="video in videos">
             <div class="col mb-4 h-100">
-                <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name"
-                    :video_id="video.id" :author_name="video.author_name" :published_at="convertDate(video.published_at)"/>
-                <!-- <div class="card video_preview text-white bg-dark scale" style="width: 18rem;">
-                    <img :src="video.preview_image_url" class="card-img-top scale video_preview_image">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ video.video_name }}</h5>
-                        <router-link v-bind:to="`/video/${video.id}`" class="stretched-link">
-                        </router-link>
-                    </div>
-                </div> -->
+                <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name" :video_id="video.id"
+                    :author_name="video.author_name" :published_at="convertDate(video.published_at)"
+                    :number_of_views="video.number_of_views" />
             </div>
         </template>
     </div>
 </template>
 
 <style scoped>
-.video_preview_image {
-    height: 160px;
-}
-
-.video_preview:hover {
-    background-color: rgb(87, 87, 87) !important;
-}
-
 .lds-ring {
     display: inline-block;
     position: absolute;

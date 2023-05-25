@@ -1,7 +1,11 @@
 <script>
 import { getResponce } from '@/scripts/requestManager.js';
 import { getUserIdFromToken } from '@/scripts/tokenManager.js'
+import VideoBlock from '@/components/VideoBlock.vue'
 export default {
+    components: {
+        VideoBlock
+    },
     data() {
         return {
             is_ready: false,
@@ -42,6 +46,16 @@ export default {
                 this.number_of_subscribers += 1
             }
             this.is_subscribed = !this.is_subscribed
+        },
+        convertDate(date) {
+            var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                timezone: 'UTC',
+            };
+            var datetime = new Date(date)
+            return datetime.toLocaleString("ru", options)
         }
     },
 
@@ -86,14 +100,10 @@ export default {
             <div class="p-4 row row-cols-4 test-block">
                 <template v-for="video in author_videos">
                     <div class="col mb-4 h-100">
-                        <div class="card video_preview text-white bg-dark scale" style="width: 18rem;">
-                            <img :src="video.preview_image_url" class="card-img-top scale video_preview_image">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ video.video_name }}</h5>
-                                <router-link v-bind:to="`/video/${video.id}`" class="stretched-link">
-                                </router-link>
-                            </div>
-                        </div>
+                        <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name"
+                            :video_id="video.id" :author_name="video.author_name"
+                            :published_at="convertDate(video.published_at)" 
+                            :number_of_views="video.number_of_views"/>
                     </div>
                 </template>
             </div>
@@ -107,15 +117,6 @@ export default {
     width: 130px;
     border-radius: 100px;
 }
-
-.video_preview_image {
-    height: 160px;
-}
-
-.video_preview:hover {
-    background-color: grey !important;
-}
-
 
 
 .lds-ring {
