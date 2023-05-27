@@ -8,17 +8,14 @@ export default {
     data() {
         return {
             videos: [],
-            is_ready: false
+            isReady: false
         };
     },
     async created() {
-        this.is_ready = false
-        const responce = await getResponce('get_all_videos_inf', {})
-        this.is_ready = true
-        if (typeof responce.data.error !== 'undefined')
-            this.$router.push('/login')
-        else
-            this.videos = responce.data.result
+        const responce = await getResponce('get_latest_viewed_videos', {})
+        this.videos = responce.data.result
+        this.isReady = true
+        
     },
     methods: {
         convertDate(date) {
@@ -36,15 +33,16 @@ export default {
 </script>
 
 <template>
-    <div class="row row-cols-4">
-        <div class="lds-ring" v-if="is_ready == false">
+    <div class="d-flex flex-column align-items-center justify-content-center gap-4">
+        <div class="lds-ring" v-if="isReady == false">
             <div></div>
             <div></div>
             <div></div>
             <div></div>
         </div>
+        <h1 class="">История просмотров</h1>
         <template v-for="video in videos">
-            <div class="col mb-4 h-100">
+            <div class="">
                 <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name" :video_id="video.id"
                     :author_name="video.author_name" :published_at="convertDate(video.published_at)"
                     :number_of_views="video.number_of_views" />

@@ -7,6 +7,8 @@ import UploadVideo from '@/views/UploadVideo.vue'
 import VideoList from '@/views/VideoList.vue'
 import Video from '@/views/Video.vue'
 import Settings from '@/views/Settings.vue'
+import VideoViewingHistory from '@/views/VideoViewingHistory.vue'
+
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -15,9 +17,10 @@ const router = createRouter({
         { path: '/login', component: LoginForm, name: 'login' },
         { path: '/register', component: RegisterForm, name: 'register' },
         { path: '/user/:id', component: UserProfile, name: 'user-profile' },
-        { path: '/upload-video', component: UploadVideo, name: 'upload-video' },   
+        { path: '/upload-video', component: UploadVideo, name: 'upload-video' },
         { path: '/video/:id', component: Video, name: 'video-player' },
-        {path: '/settings', component:Settings, name: 'settings'}
+        { path: '/settings', component: Settings, name: 'settings' },
+        { path: '/history', component: VideoViewingHistory, name: 'history' }
     ]
 })
 

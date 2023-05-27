@@ -94,7 +94,7 @@ export default {
                     </div>
 
                 </div>
-                <button class="btn btn-dark btn-lg ms-auto" @click="changeSubscription" v-if="user_id != author_id">{{
+                <button class="btn btn-light btn-lg ms-auto subscribed_button" @click="changeSubscription" v-if="user_id != author_id">{{
                     SubscribeText }}</button>
             </div>
             <div class="p-4 row row-cols-4 test-block">
@@ -115,6 +115,10 @@ export default {
 <style scoped>
 .user-avatar {
     width: 130px;
+    border-radius: 100px;
+}
+
+.subscribed_button {
     border-radius: 100px;
 }
 

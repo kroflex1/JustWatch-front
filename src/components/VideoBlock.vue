@@ -1,6 +1,6 @@
 <script>
 export default {
-    props: ['preview_image_url', 'video_name', 'video_id', 'author_name', 'published_at', 'number_of_views'],
+    props: ['preview_image_url', 'video_name', 'video_id', 'author_name', 'author_id', 'published_at', 'number_of_views'],
 
 };
 </script>

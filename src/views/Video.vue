@@ -1,6 +1,7 @@
 <script>
 import VideoPlayer from '@/components/VideoPlayer.vue';
 import { getResponce } from '@/scripts/requestManager.js';
+import { getUserIdFromToken } from '@/scripts/tokenManager.js'
 export default {
     name: 'VideoExample',
     components: {
@@ -39,7 +40,8 @@ export default {
             isLikeActive: false,
             isDislikeActive: false,
             comments: [],
-            commentText: ''
+            commentText: '',
+            userId: null
         };
     },
     async created() {
@@ -54,7 +56,7 @@ export default {
                 description: videoResponce.data.result.description,
                 numberOfLikes: videoResponce.data.result.reactionsInf.number_of_likes,
                 numberOfDislikes: videoResponce.data.result.reactionsInf.number_of_dislikes,
-                numberOfViews: videoResponce.data.result.reactionsInf.number_of_views,
+                numberOfViews: videoResponce.data.result.number_of_views,
                 publishedAt: videoResponce.data.result.published_at
             }
             this.comments = videoResponce.data.result.comments
@@ -79,6 +81,7 @@ export default {
 
             const checkSubscribedResponce = await getResponce('is_subscribed_to_author', { author_id: authorId })
             this.isSubscribed = checkSubscribedResponce.data.result
+            this.userId = getUserIdFromToken()
 
             this.isVideoReady = true
         }
@@ -99,6 +102,14 @@ export default {
             return {
                 'active': this.isDislikeActive
             }
+        },
+        subscribeText() {
+            if (this.isSubscribed)
+                return "Отписаться"
+            return "Подписаться"
+        },
+        numberOfSubscribers() {
+            return this.channelInf.numberOfSubscribers
         }
     },
     methods: {
@@ -138,7 +149,7 @@ export default {
             this.commentText = ''
             this.comments = responce.data.result
         },
-        convertTime(date) {
+        convertCommentDate(date) {
             var options = {
                 year: 'numeric',
                 month: 'long',
@@ -149,6 +160,27 @@ export default {
             };
             var datetime = new Date(date)
             return datetime.toLocaleString("ru", options)
+        },
+        converVideoDate(date) {
+            var options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                timezone: 'UTC',
+            };
+            var datetime = new Date(date)
+            return datetime.toLocaleString("ru", options)
+        },
+        async changeSubscription() {
+            if (this.isSubscribed) {
+                const responce = await getResponce('unsubscribe', { author_id: this.channelInf.authorId })
+                this.channelInf.numberOfSubscribers -= 1
+            }
+            else {
+                const responce = await getResponce('subscribe', { author_id: this.channelInf.authorId })
+                this.channelInf.numberOfSubscribers += 1
+            }
+            this.isSubscribed = !this.isSubscribed
         }
     }
 };
@@ -166,12 +198,14 @@ export default {
                     <router-link v-bind:to="`/user/${channelInf.authorId}`">
                         <img :src="channelInf.authorAvatarUrl" class="author_avatar" alt="">
                     </router-link>
-
                     <div class="d-flex flex-column">
                         <router-link v-bind:to="`/user/${channelInf.authorId}`" class="author_link">{{
                             channelInf.authorName }}</router-link>
-                        <p class="text-muted">Подписчиков: {{ channelInf.numberOfSubscribers }}</p>
+                        <p class="text-muted">Подписчиков: {{ numberOfSubscribers }}</p>
                     </div>
+                    <button class="btn btn-light subscribed_button" @click="changeSubscription"
+                        v-if="userId != channelInf.authorId">{{ subscribeText
+                        }}</button>
                     <div class="ms-auto">
                         <button class="reaction-button py-2 px-2" :class="likeClassObject" id="like" @click="OnLikeClick">
                             <div class="d-flex align-items-center">
@@ -195,13 +229,18 @@ export default {
                             </div>
                         </button>
                     </div>
-
-
                 </div>
-                <p>{{ video_inf.description }}</p>
+                <div class="video_inf_block p-2">
+                    <div class="d-flex gap-3">
+                        <p>Просмотров: {{ video_inf.numberOfViews }}</p>
+                        <p>Опубликовано: {{ converVideoDate(video_inf.publishedAt) }}</p>
+                    </div>
+                    <p>{{ video_inf.description }}</p>
+                </div>
+
             </div>
 
-            <form class="d-flex flex-column mb-3 gap-2" @submit.prevent="onWriteComment">
+            <form class="d-flex flex-column mb-3 gap-1" @submit.prevent="onWriteComment">
                 <textarea class="form-control bg-dark text-white" id="exampleFormControlTextarea1" rows="1"
                     placeholder="Введите комментарий" v-model="commentText" required></textarea>
                 <button class="btn btn-primary align-self-end" type="submit">Оставить комментарий</button>
@@ -212,7 +251,7 @@ export default {
                     <div class="comment p-3 pe-4">
                         <p class="mb-2">{{ comment.author_name }}</p>
                         <p class="mb-1">{{ comment.text }}</p>
-                        <p class="comment-date">{{ convertTime(comment.published_at) }}</p>
+                        <p class="comment-date">{{ convertCommentDate(comment.published_at) }}</p>
                     </div>
                 </template>
             </div>
@@ -266,10 +305,17 @@ export default {
     border-radius: 100px;
 }
 
-.author_link{
+.author_link {
     color: white;
     text-decoration: none;
 }
 
+.subscribed_button {
+    border-radius: 100px;
+}
 
+.video_inf_block {
+    background-color: #3d3d3d;
+    border-radius: 10px;
+}
 </style>
