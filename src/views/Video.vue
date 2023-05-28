@@ -181,6 +181,10 @@ export default {
                 this.channelInf.numberOfSubscribers += 1
             }
             this.isSubscribed = !this.isSubscribed
+        },
+        async deleteVideo(){
+            const responce = await getResponce('delete_video', { video_id: this.$route.params.id})
+            this.$router.push('/')
         }
     }
 };
@@ -191,9 +195,25 @@ export default {
 <template>
     <div class="row justify-content-md-center h-20 video-container" v-if="isVideoReady">
         <div class="col-7 bg-dark">
-            <video-player :options="videoOptions" class="mb-2" />
+            <video-player :options="videoOptions" class="mb-3" />
             <div class="d-flex flex-column gap-3 mb-3">
-                <p class="fw-bold fs-4 lh-1">{{ video_inf.name }}</p>
+                <div class="d-flex align-items-center">
+                    <p class="fw-bold fs-4 lh-1">{{ video_inf.name }}</p>
+                    <div class="btn-group ms-auto dropstart" v-if="userId == channelInf.authorId">
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false"  >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" fill="currentColor"
+                                class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                <path
+                                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><button class="dropdown-item" type="button" @click="deleteVideo">Удалить</button></li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="d-flex align-items-center gap-3">
                     <router-link v-bind:to="`/user/${channelInf.authorId}`">
                         <img :src="channelInf.authorAvatarUrl" class="author_avatar" alt="">

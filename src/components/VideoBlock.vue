@@ -1,7 +1,6 @@
 <script>
 export default {
-    props: ['preview_image_url', 'video_name', 'video_id', 'author_name', 'author_id', 'published_at', 'number_of_views'],
-
+    props: ['preview_image_url', 'video_name', 'video_id', 'author_name', 'author_id', 'published_at', 'number_of_views', 'can_delete'],
 };
 </script>
 
@@ -15,7 +14,6 @@ export default {
                 <p class="text-muted">Просмотров: {{ number_of_views }}</p>
                 <p class="text-muted ms-auto">{{ published_at }}</p>
             </div>
-
             <router-link v-bind:to="`/video/${video_id}`" class="stretched-link">
             </router-link>
         </div>
