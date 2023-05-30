@@ -36,7 +36,7 @@ export default {
 </script>
 
 <template>
-    <div class="row row-cols-4">
+    <div class="row row-cols-4 ps-5">
         <div class="lds-ring" v-if="is_ready == false">
             <div></div>
             <div></div>
