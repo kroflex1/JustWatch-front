@@ -27,6 +27,7 @@ export default {
         this.number_of_videos = responce.data.result.number_of_videos
         this.author_videos = responce.data.result.user_videos
         this.author_avatar_url = responce.data.result.user_avatar_url
+        this.checkURL(responce.data.result.user_avatar_url)
 
         var responce = await getResponce('is_subscribed_to_author', { author_id: this.author_id })
         this.is_subscribed = responce.data.result
@@ -56,6 +57,14 @@ export default {
             };
             var datetime = new Date(date)
             return datetime.toLocaleString("ru", options)
+        },
+        checkURL(url) {
+            var tester = new Image();
+            tester.onerror = this.imageNotFound
+            tester.src = url;
+        },
+        imageNotFound() {
+            this.author_avatar_url = './src/staticFiles/standartAvatar.jpg'
         }
     },
 
@@ -94,16 +103,28 @@ export default {
                     </div>
 
                 </div>
-                <button class="btn btn-light btn-lg ms-auto subscribed_button" @click="changeSubscription" v-if="user_id != author_id">{{
-                    SubscribeText }}</button>
+                <button class="btn btn-light btn-lg ms-auto subscribed_button" @click="changeSubscription"
+                    v-if="user_id != author_id">{{
+                        SubscribeText }}</button>
             </div>
-            <div class="p-4 row row-cols-4 test-block">
+            <div v-if="number_of_videos === 0">
+                <div class="upload-block">
+                    <router-link to="/upload-video" class="d-flex flex-column align-items-md-center upload-link h6"> <svg
+                            xmlns="http://www.w3.org/2000/svg" width="120" fill="currentColor" class="bi bi-upload"
+                            viewBox="0 0 16 16">
+                            <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                            <path
+                                d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
+                        </svg> Загрузите своё первое видео </router-link>
+                </div>
+            </div>
+            <div v-else class="p-4 row row-cols-4 test-block">
                 <template v-for="video in author_videos">
                     <div class="col mb-4 h-100">
                         <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name"
                             :video_id="video.id" :author_name="video.author_name"
-                            :published_at="convertDate(video.published_at)" 
-                            :number_of_views="video.number_of_views"/>
+                            :published_at="convertDate(video.published_at)" :number_of_views="video.number_of_views" />
                     </div>
                 </template>
             </div>
@@ -130,6 +151,25 @@ export default {
     left: 45%;
     width: 80px;
     height: 80px;
+}
+
+.upload-block {
+    display: inline-block;
+    position: absolute;
+    left: 45%;
+    top: 50%;
+}
+
+.upload-link {
+    color: white;
+    text-decoration: none;
+    transition: all 0.5s ease;
+}
+
+.upload-link:hover {
+    color: rgb(185, 185, 185);
+    transform: scale(1.08);
+
 }
 
 .lds-ring div {
