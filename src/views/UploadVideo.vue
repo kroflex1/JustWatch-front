@@ -11,6 +11,8 @@ export default {
             videoUploadProgress: 0,
             isVideoCheck: false,
             isVideoReady: false,
+            isInvalidVideoFormat: false,
+            isInvalidImageFormat: false
         };
     },
     methods: {
@@ -21,7 +23,12 @@ export default {
             this.imagePreview = event.target.files[0]
         },
         async onSubmit(event) {
+            this.isInvalidVideoFormat = false
+            this.isInvalidImageFormat = false
             this.isVideoReady = false
+            if (this.areFilesInvalid())
+                return
+
             var formData = new FormData()
             formData.append('video_data', this.videoFile, 'video_data')
             formData.append('preview_image_data', this.imagePreview, 'preview_image_data')
@@ -47,6 +54,17 @@ export default {
             this.videoDescription = 0
             this.videoName = ""
             this.videoDescription = ""
+        },
+        areFilesInvalid() {
+            if (this.videoFile.type != 'video/mp4') {
+                this.isInvalidVideoFormat = true
+                return true
+            }
+            if(this.imagePreview.type != 'image/jpeg' && this.imagePreview.type != 'image/png'){
+                this.isInvalidImageFormat = true
+                return true
+            }
+            return false
         }
     },
 };
@@ -80,13 +98,20 @@ export default {
                                     <div class="form-outline form-white mb-4">
                                         <input type="file" class="form-control form-control-lg"
                                             @change="onVideoFileSelected" required />
-                                        <label class="form-label">Видео</label>
+                                        <label class="form-label">Видео mp4</label>
+                                    </div>
+
+                                    <div v-if="isInvalidVideoFormat" class="alert alert-danger" role="alert">
+                                        Неверный формат видео
                                     </div>
 
                                     <div class="form-outline form-white mb-4">
                                         <input type="file" class="form-control form-control-lg"
                                             @change="onImagePreviewSelected" required />
-                                        <label class="form-label m-0">Превью видео</label>
+                                        <label class="form-label m-0">Превью видео img/jpeg</label>
+                                    </div>
+                                    <div v-if="isInvalidImageFormat" class="alert alert-danger" role="alert">
+                                        Неверный формат изображения
                                     </div>
 
 
@@ -145,6 +170,10 @@ export default {
     animation: 2s show ease;
 }
 
+.confirm-check-mark path {
+    color: blueviolet;
+}
+
 @keyframes show {
     from {
         opacity: 0;
@@ -157,9 +186,6 @@ export default {
     }
 }
 
-.confirm-check-mark path {
-    color: blueviolet;
-}
 
 
 .lds-ellipsis {

@@ -7,7 +7,7 @@ import router from './router'
 import axios from 'axios'
 import 'video.js/dist/video-js.css'
 
-axios.defaults.baseURL = 'https://justwatch-production.up.railway.app/'
+axios.defaults.baseURL = 'http://127.0.0.1:8000/'
 const app = createApp(App)
 app.use(router)
 app.mount('#app')

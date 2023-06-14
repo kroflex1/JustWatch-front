@@ -27,7 +27,7 @@ export default {
         this.number_of_videos = responce.data.result.number_of_videos
         this.author_videos = responce.data.result.user_videos
         this.author_avatar_url = responce.data.result.user_avatar_url
-        this.checkURL(responce.data.result.user_avatar_url)
+        this.checkURL(this.author_avatar_url)
 
         var responce = await getResponce('is_subscribed_to_author', { author_id: this.author_id })
         this.is_subscribed = responce.data.result
@@ -123,7 +123,7 @@ export default {
                 <template v-for="video in author_videos">
                     <div class="col mb-4 h-100">
                         <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name"
-                            :video_id="video.id" :author_name="video.author_name"
+                            :video_id="video.id" :author_name="video.author_name" :author_id="video.author_id"
                             :published_at="convertDate(video.published_at)" :number_of_views="video.number_of_views" />
                     </div>
                 </template>
