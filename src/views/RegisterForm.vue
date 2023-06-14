@@ -65,7 +65,7 @@ export default {
                                         {{ errorMessage }}
                                     </div>
 
-                                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Войти</button>
+                                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Зарегестрироваться</button>
 
                                 </div>
 

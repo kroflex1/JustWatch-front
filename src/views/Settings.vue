@@ -27,7 +27,7 @@ export default {
             var formData = new FormData()
             formData.append('avatar_data', this.avatarFile, 'avatar_data')
             this.isImageUploading = true
-            const responce = await axios.post("api/upload-avatar/", formData, {
+            const responce = await axios.post("api/upload-avatar", formData, {
                 headers: {
                     'access-token': localStorage.getItem('access-token')
                 },

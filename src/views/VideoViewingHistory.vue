@@ -44,7 +44,7 @@ export default {
         <template v-for="video in videos">
             <div class="">
                 <VideoBlock :preview_image_url="video.preview_image_url" :video_name="video.video_name" :video_id="video.id"
-                    :author_name="video.author_name" :published_at="convertDate(video.published_at)"
+                    :author_name="video.author_name" :published_at="convertDate(video.published_at)" :author_id="video.author_id"
                     :number_of_views="video.number_of_views" />
             </div>
         </template>

@@ -19,7 +19,7 @@ export default {
             tester.src = this.author_avatar_url;
         },
         imageNotFound() {
-            this.author_avatar_url = './src/staticFiles/standartAvatar.jpg'
+            this.author_avatar_url = 'https://storage.yandexcloud.net/just-watch-avatars/standartAvatar.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJED_bUtsncA2HLQAgpIaPu%2F20230614%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20230614T160544Z&X-Amz-Expires=2592000&X-Amz-Signature=4914106BD77A045E1C3DBACB06E1C6FA2259CB70FF4A9EE793AE05CBFD063939&X-Amz-SignedHeaders=host'
         }
     }
 };
@@ -66,7 +66,7 @@ export default {
     border-radius: 100px;
 }
 
-.video_inf_text{
+.video_inf_text {
     font-size: 11pt;
 }
 </style>

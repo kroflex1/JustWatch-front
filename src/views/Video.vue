@@ -45,7 +45,7 @@ export default {
         };
     },
     async created() {
-        const watchResponce = await getResponce('watch_video', { video_id: parseInt(this.$route.params.id) })
+        await getResponce('watch_video', { video_id: parseInt(this.$route.params.id) })
         const videoResponce = await getResponce('get_video_show_inf_by_id', { video_id: parseInt(this.$route.params.id) })
         if (typeof videoResponce.data.error !== 'undefined')
             this.$router.push('/')
@@ -78,6 +78,7 @@ export default {
                 numberOfSubscribers: authorChannelResponce.data.result.number_of_subscribers,
                 authorAvatarUrl: authorChannelResponce.data.result.user_avatar_url
             }
+            this.checkURL(this.channelInf.authorAvatarUrl)
 
             const checkSubscribedResponce = await getResponce('is_subscribed_to_author', { author_id: authorId })
             this.isSubscribed = checkSubscribedResponce.data.result
@@ -185,6 +186,14 @@ export default {
         async deleteVideo() {
             const responce = await getResponce('delete_video', { video_id: this.$route.params.id })
             this.$router.push('/')
+        },
+        checkURL(url) {
+            var tester = new Image();
+            tester.onerror = this.imageNotFound
+            tester.src = url
+        },
+        imageNotFound() {
+            this.channelInf.authorAvatarUrl = 'https://storage.yandexcloud.net/just-watch-avatars/standartAvatar.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJED_bUtsncA2HLQAgpIaPu%2F20230614%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20230614T160544Z&X-Amz-Expires=2592000&X-Amz-Signature=4914106BD77A045E1C3DBACB06E1C6FA2259CB70FF4A9EE793AE05CBFD063939&X-Amz-SignedHeaders=host'
         }
     }
 };

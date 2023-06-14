@@ -22,6 +22,7 @@ export default {
     async created() {
         this.author_id = parseInt(this.$route.params.id)
         var responce = await getResponce('get_user_profile', { user_id: this.author_id })
+        console.log(responce.data)
         this.author_username = responce.data.result.username
         this.number_of_subscribers = responce.data.result.number_of_subscribers
         this.number_of_videos = responce.data.result.number_of_videos
@@ -64,7 +65,7 @@ export default {
             tester.src = url;
         },
         imageNotFound() {
-            this.author_avatar_url = './src/staticFiles/standartAvatar.jpg'
+            this.author_avatar_url = 'https://storage.yandexcloud.net/just-watch-avatars/standartAvatar.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=YCAJED_bUtsncA2HLQAgpIaPu%2F20230614%2Fru-central1%2Fs3%2Faws4_request&X-Amz-Date=20230614T160544Z&X-Amz-Expires=2592000&X-Amz-Signature=4914106BD77A045E1C3DBACB06E1C6FA2259CB70FF4A9EE793AE05CBFD063939&X-Amz-SignedHeaders=host'
         }
     },
 
@@ -107,7 +108,7 @@ export default {
                     v-if="user_id != author_id">{{
                         SubscribeText }}</button>
             </div>
-            <div v-if="number_of_videos === 0">
+            <div v-if="number_of_videos === 0 && user_id == author_id">
                 <div class="upload-block">
                     <router-link to="/upload-video" class="d-flex flex-column align-items-md-center upload-link h6"> <svg
                             xmlns="http://www.w3.org/2000/svg" width="120" fill="currentColor" class="bi bi-upload"

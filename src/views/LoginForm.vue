@@ -20,7 +20,7 @@ export default {
             else {
                 localStorage.setItem('access-token', responce.data.result.access_token)
                 localStorage.setItem('refresh-token', responce.data.result.refresh_token)
-                this.$router.push('/')
+                this.$router.push('/') 
             }
         }
     },
